@@ -1,19 +1,29 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { MaterialIcons, Entypo, AntDesign, Ionicons, Feather, FontAwesome } from '@expo/vector-icons';
-import { Image, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { Image, Pressable, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import styles from './styles';
 import movie from '../../assets/data/movie';
-
-const firstEpisode = movie.seasons.items[0].episodes.items[0];
+import EpisodeItem from '../../components/EpisodeItem';
+import VideoPlayer from '../../components/VideoPlayer'
+const firstSeason = movie.seasons.items[0];
+const firstEpisode = firstSeason.episodes.items[0];
 
 const MovieDetailsScreen = () => {
-
+    const [currentSeason, setCurrentSeason] = useState(firstSeason);
+    const [currentEpisode, setcurrentEpisode] = useState(firstSeason.episodes.items[0]);
+    const seasonNames = movie.seasons.items.map(season => season.name)
     return (
         <View>
-            <SafeAreaView>
-                <ScrollView>
-                    <Image style={styles.image} source={{ uri: firstEpisode.poster }} />
+            {/* <Image style={styles.image} source={{ uri: firstEpisode.poster }} /> */}
+            <VideoPlayer episode={currentEpisode}></VideoPlayer>
+
+            <FlatList data={currentSeason.episodes.items}
+                renderItem={({ item }) => (<EpisodeItem episode={item} onPress={setcurrentEpisode} />)}
+
+                style={{ marginBottom: 250 }}
+                ListHeaderComponent={(
                     <View style={{ padding: 12 }}>
                         <Text style={styles.title}>{movie.title}</Text>
                         <View style={{ flexDirection: 'row' }}>
@@ -64,9 +74,21 @@ const MovieDetailsScreen = () => {
                                 <Text style={{ color: 'darkgrey', marginTop: 5 }}>Share</Text>
                             </View>
                         </View>
+                        <View style={{ marginVertical: 10 }}>
+                            <Picker
+                                style={{ width: 130 }}
+                                selectedValue={currentSeason.name}
+                                onValueChange={(itemValue, itemIndex) => {
+                                    setCurrentSeason(movie.seasons.items[itemIndex])
+                                }}>
+                                {seasonNames.map(seasonName => (
+                                    <Picker.Item label={seasonName} value={seasonName} key={seasonName} />
+                                ))}
+                            </Picker>
+                        </View>
                     </View>
-                </ScrollView>
-            </SafeAreaView>
+                )}
+            />
         </View>
     )
 }
