@@ -49,7 +49,7 @@ export default function BottomTabNavigator() {
         name="Downloads"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <AntDesign name="download" size={24} color={color}/>
+          tabBarIcon: ({ color }) => <AntDesign name="download" size={24} color={color} />
         }}
       />
     </BottomTab.Navigator>
@@ -62,17 +62,18 @@ const HomeStack = createStackNavigator<HomeParamList>();
 function TabOneNavigator() {
   return (
     <HomeStack.Navigator>
-       <HomeStack.Screen
-        name="MovieDetailsScreen"
-        component={MovieDetailsScreen}
-        options={{ title:''}}
-      />
       <HomeStack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{ headerShown: false}}
+        options={{ headerShown: false }}
       />
-     
+
+      <HomeStack.Screen
+        name="MovieDetailsScreen"
+        component={MovieDetailsScreen}
+        options={{ title: '' }}
+      />
+
     </HomeStack.Navigator>
   );
 }
